@@ -1,0 +1,140 @@
+// String Replace
+@function str-replace($string, $search, $replace: "") {
+  $index: str-index($string, $search);
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+  @return $string;
+}
+
+// Font Face
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
+  $src: null;
+  $extmods: (
+      eot: "?",
+      svg: "#" + str-replace($name, " ", "_")
+  );
+  $formats: (
+      otf: "opentype",
+      ttf: "truetype"
+  );
+  @each $ext in $exts {
+    $extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+    $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+    $src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+  }
+  @font-face {
+    font-family: quote($name);
+    font-style: $style;
+    font-weight: $weight;
+    src: $src;
+  }
+}
+
+// Animation
+@mixin animation($animate...) {
+  $max: length($animate);
+  $animations: '';
+
+  @for $i from 1 through $max {
+    $animations: #{$animations + nth($animate, $i)};
+
+    @if $i < $max {
+      $animations: #{$animations + ", "};
+    }
+  }
+  -webkit-animation: $animations;
+  -moz-animation: $animations;
+  -o-animation: $animations;
+  animation: $animations;
+}
+
+// Animation KeyFrames
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+    @content;
+  }
+  @-moz-keyframes #{$animationName} {
+    @content;
+  }
+  @-o-keyframes #{$animationName} {
+    @content;
+  }
+  @keyframes #{$animationName} {
+    @content;
+  }
+}
+
+// Leaner gradient
+@mixin linear-gradient($position, $colors...) {
+  $max: length($colors);
+
+  background: linear-gradient($position, $colors);
+  background: -webkit-linear-gradient($position, $colors);
+  background: -o-linear-gradient($position, $colors);
+  background: -ms-linear-gradient($position, $colors);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=nth($colors, 1), endColorstr=nth($colors, $max));
+  background: -moz-linear-gradient($position, $colors);
+}
+
+// After clear
+@mixin after-clear() {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// Element position
+@mixin pos($top: null, $right: null, $bottom: null, $left: null){
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+// Position absolute
+@mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
+  position: absolute;
+  @include pos($top, $right, $bottom, $left);
+}
+
+// Pseudo element position absolute
+@mixin pseudoAbsolute($top: null, $right: null, $bottom: null, $left: null) {
+  content: '';
+  display: block;
+  @include absolute($top, $right, $bottom, $left);
+}
+
+// Size: width, height
+@mixin size($size...) {
+  $max: length($size);
+  $width: nth($size, 1);
+  $height: '';
+
+  @if $max > 1 {
+    $height: nth($size, 2);
+  } @else {
+    $height: nth($size, 1);
+  }
+
+  width: $width;
+  height: $height;
+}
+
+// Placeholder
+@mixin placeholder(){
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &::-moz-placeholder {
+    @content;
+  }
+  &:-moz-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+}

@@ -1,0 +1,135 @@
+@import "greed.var";
+@import "default.mixin";
+
+@mixin make-row() {
+  @if $enable-flex {
+    display: flex;
+    flex-wrap: wrap;
+  } @else {
+    @include after-clear();
+  }
+  margin-right: ($column-indents / -2);
+  margin-left: ($column-indents / -2);
+}
+
+@mixin make-col($padding: null) {
+  $indents: $column-indents / 2;
+
+  @if $padding {
+    width: 100%;
+    padding-right: $indents;
+    padding-left: $indents;
+  } @else {
+    width: calc(100% - #{$column-indents});
+    margin-right: $indents;
+    margin-left: $indents;
+  }
+
+  @if $enable-flex {
+    @if $padding {
+      flex: 0 0 100%;
+      max-width: 100%;
+    } @else {
+      flex: 0 0 calc(100% - #{$column-indents});
+      max-width: calc(100% - #{$column-indents});
+    }
+  } @else {
+    float: left;
+  }
+}
+
+@mixin make-col-media($size, $padding: null) {
+  $percentage: percentage($size / $columns-length);
+
+  @if $padding {
+    width: $percentage;
+  } @else {
+    width: calc(#{$percentage} - #{$column-indents});
+  }
+
+  @if $enable-flex {
+    @if $padding {
+      flex: 0 0 $percentage;
+      max-width: $percentage;
+    } @else {
+      flex: 0 0 calc(#{$percentage} - #{$column-indents});
+      max-width: calc(#{$percentage} - #{$column-indents});
+    }
+  }
+}
+
+@mixin make-offset-media($size, $padding: null) {
+  $percentage: percentage($size / $columns-length);
+  $indents: $column-indents / 2;
+
+  @if $padding {
+    margin-left: $percentage;
+  } @else {
+    margin-left: calc(#{$percentage} - #{$indents});
+  }
+}
+
+@mixin media($min, $max) {
+  @if not $max {
+    @media (min-width: #{$min + 'px'}) {
+      @content;
+    }
+  } @else if not $min {
+    @media (max-width: #{$max + 'px'}) {
+      @content;
+    }
+  } @else {
+    @media (min-width: #{$min + 'px'}) and (max-width: #{$max + px}) {
+      @content;
+    }
+  }
+}
+
+@mixin make-clearfix(){
+  & .clearfix{
+    @if $enable-flex {
+      width: 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+    } @else {
+      @include after-clear();
+    }
+  }
+}
+
+#{'.' + $name-row},
+#{'.' + $name-row-pad} {
+  @include make-row();
+  @include make-clearfix();
+}
+
+@for $i from 1 through $columns-length {
+  @each $name, $min, $max in $name-col {
+
+    #{'.' + $name-row} #{'.' + $name-before-col + $name + $i} {
+      @include make-col();
+      @include media($min, $max) {
+        @include make-col-media($i);
+      }
+    }
+
+    #{'.' + $name-row-pad} #{'.' + $name-before-col + $name + $i} {
+      @include make-col(true);
+      @include media($min, $max) {
+        @include make-col-media($i, true);
+      }
+    }
+
+    #{'.' + $name-row} #{'.' + $name-before-col + $name + $name-offset + $i} {
+      @include media($min, $max) {
+        @include make-offset-media($i);
+      }
+    }
+
+    #{'.' + $name-row-pad} #{'.' + $name-before-col + $name + $name-offset + $i} {
+      @include media($min, $max) {
+        @include make-offset-media($i, true);
+      }
+    }
+  }
+}

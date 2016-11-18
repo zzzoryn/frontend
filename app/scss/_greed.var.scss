@@ -1,0 +1,14 @@
+$enable-flex: true; // Включить flex-box
+$columns-length: 12; // Колличество колонок
+$column-indents: 4px; // Отступы в колонках
+
+// Names
+$name-row: 'row';
+$name-row-pad: 'row-pad';
+$name-before-col: 'col-';
+$name-offset: 'offset-';
+$name-col: ('uxs-', null, 480),
+    ('xs-', 481, null),
+    ('sm-', 768, null),
+    ('md-', 992, null),
+    ('lg-', 1200, null);
