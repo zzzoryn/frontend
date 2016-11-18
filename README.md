@@ -9,3 +9,7 @@ npm i
 bower i
 gulp
 ```
+
+### EJS templater:
+* github: <https://github.com/tj/ejs>
+* site: <http://ejs.co/>
