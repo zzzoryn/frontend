@@ -1,0 +1,40 @@
+{
+  "name": "sf",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "zzzoryn <aleksandr-zoryn@ya.ru>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "svgxuse": "^1.1.21",
+    "Swiper": "swiper#^3.3.1"
+  },
+  "overrides": {
+    "jquery": {
+      "main": [
+        "dist/jquery.min.js"
+      ]
+    },
+    "Swiper": {
+      "main": [
+        "dist/css/swiper.min.css",
+        "dist/js/swiper.min.js"
+      ]
+    },
+    "svgxuse": {
+      "main": [
+        "svgxuse.min.js"
+      ]
+    }
+  }
+}
