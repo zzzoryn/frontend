@@ -1,6 +1,6 @@
-# frontend
+# Frontend
 
-### init
+### Init
 ```javascript
 git clone https://github.com/zzzoryn/frontend.git folder-name
 cd folder-name
